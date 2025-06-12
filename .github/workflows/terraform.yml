@@ -28,6 +28,7 @@ jobs:
         with:
           role-to-assume: arn:aws:iam::381491972551:role/GithubActionsRole
           aws-region: us-east-1
+          audience: sts.amazonaws.com
       - run: terraform init
       - run: terraform plan
 
@@ -43,5 +44,6 @@ jobs:
         with:
           role-to-assume: arn:aws:iam::381491972551:role/GithubActionsRole
           aws-region: us-east-1
+          audience: sts.amazonaws.com
       - run: terraform init
       - run: terraform apply -auto-approve

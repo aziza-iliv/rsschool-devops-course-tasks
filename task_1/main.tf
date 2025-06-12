@@ -7,7 +7,7 @@ terraform {
   }
 
   backend "s3" {
-    bucket         = "aziza-tfstate-20250607"    
+    bucket         = "aziza-tfstate-20250607"
     key            = "state/terraform.tfstate"
     region         = "us-east-1"
     encrypt        = true
@@ -35,4 +35,3 @@ resource "aws_s3_bucket_versioning" "versioning" {
     status = "Enabled"
   }
 }
-

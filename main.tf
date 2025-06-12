@@ -7,7 +7,7 @@ terraform {
   }
 
   backend "s3" {
-    bucket         = "aziza-tfstate-20250607"    # ← здесь значения жёстко
+    bucket         = "aziza-tfstate-20250607" # ← здесь значения жёстко
     key            = "state/terraform.tfstate"
     region         = "us-east-1"
     encrypt        = true

@@ -20,6 +20,7 @@ jobs:
       - name: Terraform FMT
         working-directory: task_1
         run: terraform fmt -check -recursive
+      
 
   terraform-plan:
     runs-on: ubuntu-latest
@@ -40,7 +41,7 @@ jobs:
         working-directory: task_1
         
       - name: Terraform PLAN
-        run: terraform plan
+        run: terraform plan -lock=false
         working-directory: task_1
         
 

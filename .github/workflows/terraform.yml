@@ -2,7 +2,7 @@ name: Terraform CI/CD
 
 on:
   push:
-    branches: [main, task_1]
+    branches: [main, task_2]
   pull_request:
 
 permissions:
@@ -38,11 +38,11 @@ jobs:
           aws-region: us-east-1
       - name: Terraform INIT
         run: terraform init
-        working-directory: task_1
+        working-directory: task_2/terraform-solution
         
       - name: Terraform PLAN
         run: terraform plan -lock=false
-        working-directory: task_1
+        working-directory: task_2/terraform-solution
         
 
   terraform-apply:
@@ -60,9 +60,9 @@ jobs:
           aws-region: us-east-1
       - name: Terraform INIT
         run: terraform init
-        working-directory: task_1
+        working-directory: task_2/terraform-solution
 
       - name: Terraform APPLY
         run: terraform apply -auto-approve -lock=false
-        working-directory: task_1
+        working-directory: task_2/terraform-solution
        

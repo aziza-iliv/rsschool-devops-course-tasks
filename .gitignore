@@ -1,2 +1,2 @@
-.terraform
-venv/
+*
+!task_5/

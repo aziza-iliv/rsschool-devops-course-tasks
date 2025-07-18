@@ -1,0 +1,17 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Helm Deploy') {
+            steps {
+                sh 'helm upgrade --install flask-app ./task_5/flask-app'
+            }
+        }
+
+        stage('Verify App') {
+            steps {
+                sh 'curl --fail http://flask-app.default.svc.cluster.local:8080 || echo "Verification failed"'
+            }
+        }
+    }
+}

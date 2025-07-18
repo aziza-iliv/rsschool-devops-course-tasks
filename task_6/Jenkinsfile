@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    environment {
+        DOCKERHUB_USER = 'ilv2' // если другой username на DockerHub, напиши мне
+    }
+
     stages {
         stage('Build') {
             steps {
@@ -17,9 +21,9 @@ pipeline {
         stage('Docker Push') {
             steps {
                 withCredentials([string(credentialsId: 'dockerhub-token', variable: 'DOCKERHUB_TOKEN')]) {
-                    sh "echo $DOCKERHUB_TOKEN | docker login -u ilv2 --password-stdin"
-                    sh 'docker tag flask-app:latest ilv2/flask-app:latest'
-                    sh 'docker push ilv2/flask-app:latest'
+                    sh "echo $DOCKERHUB_TOKEN | docker login -u $DOCKERHUB_USER --password-stdin"
+                    sh "docker tag flask-app:latest $DOCKERHUB_USER/flask-app:latest"
+                    sh "docker push $DOCKERHUB_USER/flask-app:latest"
                 }
             }
         }
@@ -40,13 +44,13 @@ pipeline {
     post {
         success {
             mail to: 'iliyeva.aziza02@mail.ru',
-                 subject: 'Jenkins Pipeline SUCCESS',
-                 body: 'The pipeline completed successfully!'
+                 subject: "✅ Jenkins Pipeline SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                 body: "The pipeline for ${env.JOB_NAME} #${env.BUILD_NUMBER} completed successfully. Check details at ${env.BUILD_URL}"
         }
         failure {
             mail to: 'iliyeva.aziza02@mail.ru',
-                 subject: 'Jenkins Pipeline FAILURE',
-                 body: 'The pipeline failed!'
+                 subject: "❌ Jenkins Pipeline FAILURE: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                 body: "The pipeline for ${env.JOB_NAME} #${env.BUILD_NUMBER} failed. Check details at ${env.BUILD_URL}"
         }
     }
 }

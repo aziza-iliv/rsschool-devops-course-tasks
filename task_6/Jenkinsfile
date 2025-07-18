@@ -1,0 +1,52 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Build') {
+            steps {
+                sh 'docker build -t flask-app:latest ./task_5'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                echo 'No unit tests provided'
+            }
+        }
+
+        stage('Docker Push') {
+            steps {
+                withCredentials([string(credentialsId: 'dockerhub-token', variable: 'DOCKERHUB_TOKEN')]) {
+                    sh "echo $DOCKERHUB_TOKEN | docker login -u ilv2 --password-stdin"
+                    sh 'docker tag flask-app:latest ilv2/flask-app:latest'
+                    sh 'docker push ilv2/flask-app:latest'
+                }
+            }
+        }
+
+        stage('Helm Deploy') {
+            steps {
+                sh 'helm upgrade --install flask-app ./task_5/flask-app'
+            }
+        }
+
+        stage('Verify App') {
+            steps {
+                sh 'curl --fail http://flask-app.default.svc.cluster.local:8080 || echo \"Verification failed\"'
+            }
+        }
+    }
+
+    post {
+        success {
+            mail to: 'iliyeva.aziza02@mail.ru',
+                 subject: 'Jenkins Pipeline SUCCESS',
+                 body: 'The pipeline completed successfully!'
+        }
+        failure {
+            mail to: 'iliyeva.aziza02@mail.ru',
+                 subject: 'Jenkins Pipeline FAILURE',
+                 body: 'The pipeline failed!'
+        }
+    }
+}
